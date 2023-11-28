@@ -52,7 +52,7 @@ wp.blocks.registerBlockType('portfolio/custom-block',{
               React.createElement("div", {
                 className: "text-content-container container"
               }, 
-                React.createElement("label", null, "Name: "), 
+                React.createElement("label", null, "Name: "),
                 React.createElement("input", {
                   type: "text",
                   value: props.attributes.name,
@@ -64,7 +64,18 @@ wp.blocks.registerBlockType('portfolio/custom-block',{
           ));
     },
     save: function(props) {
-        return React.createElement("div", null, 
-            React.createElement("h3", null, props.attributes.name));
+        return (
+          React.createElement("div", {className: "portfolio-container"},
+            React.createElement("div", {className: "image-container"},
+              React.createElement("img", {
+                className: "about-image",
+                src: props.attributes.image
+              })
+            ),
+            React.createElement("div", {className: "name-container"},
+              React.createElement("h2", null, props.attributes.name)
+            )
+          )
+        );
     }
 })
