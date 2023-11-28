@@ -1,5 +1,5 @@
-const {MediaUpload} = wp.blockEditor;
-const {Button} = wp.components;
+const {MediaUpload, InspectorControls} = wp.blockEditor;
+const {Button, PanelBody, PanelRow} = wp.components;
 
 wp.blocks.registerBlockType('portfolio/custom-block',{
     title: "About Me Block",
@@ -12,6 +12,9 @@ wp.blocks.registerBlockType('portfolio/custom-block',{
         image: {
           type: 'string',
           default: null
+        },
+        color: {
+          
         }
     },
     edit: function(props) {
@@ -19,8 +22,21 @@ wp.blocks.registerBlockType('portfolio/custom-block',{
 
         function onImageSelect(selectedImage) { props.setAttributes({image: selectedImage.url})}
 
+        function newColor(event) { props.setAttributes({color: event.target.value})}
+
         return (
-          React.createElement("div", {className: "outer-container"}, 
+          React.createElement("div", {className: "outer-container"},
+          React.createElement(InspectorControls, null, 
+            React.createElement(PanelBody, {title: "Block Settings"},
+              React.createElement(PanelRow, null, 
+                React.createElement("input", {
+                  type: "color",
+                  value: props.attributes.color,
+                  onChange: newColor
+                }),
+              )
+            )
+          ),
             React.createElement("div", {
               className: "about-container"
             }, 
@@ -66,11 +82,13 @@ wp.blocks.registerBlockType('portfolio/custom-block',{
     save: function(props) {
         return (
           React.createElement("div", {className: "portfolio-container"},
-            React.createElement("div", {className: "image-container"},
-              React.createElement("img", {
-                className: "about-image",
-                src: props.attributes.image
-              })
+            React.createElement("div", {className: "image-container"}, 
+              React.createElement("figure", null,
+                React.createElement("img", {
+                  className: "about-image",
+                  src: props.attributes.image
+                })
+              )
             ),
             React.createElement("div", {className: "name-container"},
               React.createElement("h2", null, props.attributes.name)
