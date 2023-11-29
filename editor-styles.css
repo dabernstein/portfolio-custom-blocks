@@ -16,3 +16,11 @@
     border-right: solid 1px;
 }
 
+.portfolio-container {
+    display: flex;
+}
+
+.sidebarHeading {
+    font-size: 13px;
+    font-weight: 500;
+}

@@ -1,5 +1,5 @@
 const {MediaUpload, InspectorControls} = wp.blockEditor;
-const {Button, PanelBody, PanelRow} = wp.components;
+const {Button, PanelBody, PanelRow, ColorPicker} = wp.components;
 
 wp.blocks.registerBlockType('portfolio/custom-block',{
     title: "About Me Block",
@@ -14,7 +14,8 @@ wp.blocks.registerBlockType('portfolio/custom-block',{
           default: null
         },
         color: {
-          
+          type: "string",
+          default: "#FFFFFF"
         }
     },
     edit: function(props) {
@@ -22,21 +23,25 @@ wp.blocks.registerBlockType('portfolio/custom-block',{
 
         function onImageSelect(selectedImage) { props.setAttributes({image: selectedImage.url})}
 
-        function newColor(event) { props.setAttributes({color: event.target.value})}
+        function setColor(color) { props.setAttributes({color: color.hex})}        
 
         return (
           React.createElement("div", {className: "outer-container"},
-          React.createElement(InspectorControls, null, 
-            React.createElement(PanelBody, {title: "Block Settings"},
-              React.createElement(PanelRow, null, 
-                React.createElement("input", {
-                  type: "color",
-                  value: props.attributes.color,
-                  onChange: newColor
-                }),
+            React.createElement(InspectorControls, null, 
+              React.createElement(PanelBody, {title: "Block Settings", initialOpen: true},
+                React.createElement(PanelRow, null,
+                  React.createElement("label", { className: "sidebarHeading"}, "Color")
+                ),
+                React.createElement(PanelRow, null,
+                  React.createElement(ColorPicker, {
+                    color: props.attributes.color,
+                    defaultValue: "#FFFFFF",
+                    enableAlpha: true,
+                    onChange: setColor
+                  })
+                )
               )
-            )
-          ),
+            ),
             React.createElement("div", {
               className: "about-container"
             }, 
