@@ -1,13 +1,14 @@
 const {MediaUpload, InspectorControls} = wp.blockEditor;
-const {Button, PanelBody, PanelRow, ColorPicker} = wp.components;
+const {Button, PanelBody, PanelRow, ColorPicker, TextareaControl} = wp.components;
 
 wp.blocks.registerBlockType('portfolio/custom-block',{
     title: "About Me Block",
     icon: 'hammer',
     category: 'design',
     attributes: {
-        name: { 
-          type: 'string' 
+        aboutText: { 
+          type: 'string',
+          default: '',
         },
         image: {
           type: 'string',
@@ -19,11 +20,11 @@ wp.blocks.registerBlockType('portfolio/custom-block',{
         }
     },
     edit: function(props) {
-        function updateName(event) { props.setAttributes({name: event.target.value})}
+        function updateText(newText) { props.setAttributes({aboutText: newText})}
 
         function onImageSelect(selectedImage) { props.setAttributes({image: selectedImage.url})}
 
-        function setColor(color) { props.setAttributes({color: color.hex})}        
+        function setColor(color) { props.setAttributes({color: color})} 
 
         return (
           React.createElement("div", {className: "outer-container"},
@@ -69,16 +70,15 @@ wp.blocks.registerBlockType('portfolio/custom-block',{
                     )
                   )
                 })
-              ), 
+              ),
               React.createElement("div", {
-                className: "text-content-container container"
+                className: "text-content-container container",
               }, 
-                React.createElement("label", null, "Name: "),
-                React.createElement("input", {
-                  type: "text",
-                  value: props.attributes.name,
-                  placeholder: "name",
-                  onChange: updateName
+                React.createElement(TextareaControl, {
+                  label: "About me text",
+                  value: props.attributes.aboutText,
+                  rows: 10,
+                  onChange: updateText
                 })
               )
             )
@@ -87,16 +87,22 @@ wp.blocks.registerBlockType('portfolio/custom-block',{
     save: function(props) {
         return (
           React.createElement("div", {className: "portfolio-container"},
-            React.createElement("div", {className: "image-container"}, 
-              React.createElement("figure", null,
+            React.createElement("div", {
+              className: "image-container"
+            }, 
+              React.createElement("figure", {
+                style: {
+                  backgroundColor: props.attributes.color
+                }
+              },
                 React.createElement("img", {
                   className: "about-image",
                   src: props.attributes.image
                 })
               )
             ),
-            React.createElement("div", {className: "name-container"},
-              React.createElement("h2", null, props.attributes.name)
+            React.createElement("div", {className: "about-text-container"},
+              React.createElement("p", null, props.attributes.aboutText)
             )
           )
         );
